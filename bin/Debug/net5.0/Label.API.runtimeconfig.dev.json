@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "/Users/maximevermeeren/.dotnet/store/|arch|/|tfm|",
+      "/Users/maximevermeeren/.nuget/packages"
+    ]
+  }
+}
