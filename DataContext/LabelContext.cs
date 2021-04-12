@@ -49,8 +49,9 @@ namespace Label.API.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<SneakerOccasion>()
-            //    .HasKey(cs => new { cs.SneakerId, cs.OccasionId });
+            modelBuilder.Entity<SongArtist>()
+               .HasKey(cs => new { cs.SongId, cs.ArtistId });
+
             modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
             {
                 RecordLabelId = Guid.NewGuid(),

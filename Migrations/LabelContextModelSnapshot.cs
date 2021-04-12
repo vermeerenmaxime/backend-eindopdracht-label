@@ -101,7 +101,7 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            ArtistId = new Guid("b955bcaf-80a3-4f1c-8409-28877784a594"),
+                            ArtistId = new Guid("5cd47252-058b-403d-aa72-24d3a181de69"),
                             ArtistName = "Mave",
                             Birthdate = "08/08/2001",
                             Country = "Belgium",
@@ -134,7 +134,7 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            RecordLabelId = new Guid("ab95e584-aec7-4bbb-b5d2-f3eae94101fd"),
+                            RecordLabelId = new Guid("e468ac2a-0710-467b-aae1-5cba36db7b54"),
                             Country = "Belgium",
                             LabelName = "Loud Memory Records"
                         });
@@ -181,17 +181,16 @@ namespace Label.API.Migrations
 
             modelBuilder.Entity("Label.API.Models.SongArtist", b =>
                 {
-                    b.Property<Guid>("SongArtistId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("SongId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ArtistId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SongId")
+                    b.Property<Guid>("SongArtistId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("SongArtistId");
+                    b.HasKey("SongId", "ArtistId");
 
                     b.HasIndex("ArtistId");
 

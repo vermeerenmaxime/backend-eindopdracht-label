@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Label.API.Config;
 using Label.API.DataContext;
+using Label.API.Repositories;
+using Label.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +31,8 @@ namespace Label.API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddAutoMapper(typeof(Startup));
+            
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddDbContext<LabelContext>();
@@ -39,6 +43,11 @@ namespace Label.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Label.API", Version = "v1" });
             });
             services.AddCors(options => { options.AddPolicy("AnyOrigin", builder => { builder.AllowAnyOrigin().AllowAnyMethod(); }); });
+
+            services.AddTransient<ILabelContext, LabelContext>();
+            services.AddTransient<IArtistRepository, ArtistRepository>();
+
+            services.AddTransient<ILabelService, LabelService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
