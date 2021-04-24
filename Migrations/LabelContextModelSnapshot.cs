@@ -101,7 +101,7 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            ArtistId = new Guid("5cd47252-058b-403d-aa72-24d3a181de69"),
+                            ArtistId = new Guid("ecf4fa1b-1595-4d47-a9e6-6ddf9d4bcdc3"),
                             ArtistName = "Mave",
                             Birthdate = "08/08/2001",
                             Country = "Belgium",
@@ -134,9 +134,21 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            RecordLabelId = new Guid("e468ac2a-0710-467b-aae1-5cba36db7b54"),
+                            RecordLabelId = new Guid("94419947-98ed-4630-ac5d-17d47ab26547"),
                             Country = "Belgium",
                             LabelName = "Loud Memory Records"
+                        },
+                        new
+                        {
+                            RecordLabelId = new Guid("a95252fd-eb92-4008-b8c6-9632bf9a578c"),
+                            Country = "Belgium",
+                            LabelName = "Loud Memory"
+                        },
+                        new
+                        {
+                            RecordLabelId = new Guid("15196839-9d14-4eb1-a52c-679e7de6d9dd"),
+                            Country = "Belgium",
+                            LabelName = "Deep Memory"
                         });
                 });
 

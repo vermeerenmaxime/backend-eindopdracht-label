@@ -30,24 +30,6 @@ namespace Label.API.Controllers
             try
             {
                 return new OkObjectResult(await _labelService.GetArtists());
-                // List<Artist> artists = new List<Artist>();
-                // artists.Add(
-                //     new Artist()
-                //     {
-                //         ArtistId = Guid.NewGuid(),
-                //         ArtistName = "Eloy Hoose",
-                //         Email = "Eloyhoose@gmail.com"
-                //     }
-                // );
-                // artists.Add(
-                //     new Artist()
-                //     {
-                //         ArtistId = Guid.NewGuid(),
-                //         ArtistName = "Aten",
-                //         Email = "Aten@gmail.com"
-                //     }
-                // );
-                // return artists;
             }
             catch (Exception ex)
             {
@@ -55,16 +37,32 @@ namespace Label.API.Controllers
             }
         }
         [HttpGet]
-        [Route("artist/{artistName}")]
-        public ActionResult<Artist> GetArtistByArtistName()
+        [Route("artist/name/{artistName}")]
+        public async Task<ActionResult<Artist>> GetArtistByArtistName(string artistName)
         {
-            return new Artist();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetArtistByArtistName(artistName));
+
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
         [HttpGet]
-        [Route("artist/{artistId}")]
-        public ActionResult<Artist> GetArtistByArtistId()
+        [Route("artist/id/{artistId}")]
+        public async Task<ActionResult<Artist>> GetArtistByArtistId(Guid artistId)
         {
-            return new Artist();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetArtistByArtistId(artistId));
+
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            };
         }
 
         [HttpPost]
@@ -82,32 +80,90 @@ namespace Label.API.Controllers
             // return new Artist();
         }
 
+
+        [HttpGet]
+        [Route("songs")]
+        public async Task<ActionResult<List<Song>>> GetSongs()
+        {
+            try
+            {
+                return new OkObjectResult(await _labelService.GetSongs());
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
+
+        }
         // ! List omdat er soms meerdere songs zijn met dezelfde naam!
         [HttpGet]
         [Route("song/{songName}")]
-        public ActionResult<List<Song>> GetSongBySongName()
+        public async Task<ActionResult<List<Song>>> GetSongsBySongName(string songName)
         {
-            return new List<Song>();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetSongsBySongName(songName));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
 
         }
         [HttpGet]
         [Route("song/{songId}")]
-        public ActionResult<Song> GetSongBySongId()
+        public async Task<ActionResult<Song>> GetSongBySongId(Guid songId)
         {
-            return new Song();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetSongBySongId(songId));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
         [HttpGet]
         [Route("songs/{recordlabelName}")]
-        public ActionResult<List<Song>> GetSongsByRecordlabelName()
+        public async Task<ActionResult<List<Song>>> GetSongsByRecordlabelNameAsync(string labelName)
         {
-            return new List<Song>();
-
+            try
+            {
+                return new OkObjectResult(await _labelService.GetSongsByRecordlabelName(labelName));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
+        // [HttpPost]
+        // [Route("song")]
+        // public async Task<ActionResult<Song>> AddSong(Song song)
+        // {
+        //     try
+        //     {
+        //         return new OkObjectResult(await _labelService.AddSong(song));
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // return new StatusCodeResult(500);
+        //         // Console.WriteLine(ex);
+        //         // return new StatusCodeResult(500);
+        //         throw ex;
+        //     }
+        // }
         [HttpPost]
         [Route("song")]
-        public ActionResult<Song> AddSong()
+        public async Task<ActionResult<SongAddDTO>> AddSong(SongAddDTO song)
         {
-            return new Song();
+            try
+            {
+                return new OkObjectResult(await _labelService.AddSong(song));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         [HttpGet]
         [Route("album/{albumId}")]
@@ -142,9 +198,8 @@ namespace Label.API.Controllers
         }
         [HttpGet]
         [Route("recordlabels")]
-        public async Task<ActionResult<List<Recordlabel>>> GetRecordlabelsAsync()
+        public async Task<ActionResult<List<Recordlabel>>> GetRecordlabels()
         {
-            // return new List<Recordlabel>();
             try
             {
                 return new OkObjectResult(await _labelService.GetRecordlabels());
@@ -157,13 +212,21 @@ namespace Label.API.Controllers
         }
         [HttpGet]
         [Route("recordabel/{labelName}")]
-        public ActionResult<Recordlabel> GetRecordlabelByLabelName()
+        public async Task<ActionResult<Recordlabel>> GetRecordlabelByLabelName(String labelName)
         {
-            return new Recordlabel();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetRecordlabelByName(labelName));
+
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
         [HttpPost]
         [Route("recordlabel")]
-        public async Task<ActionResult<Recordlabel>> AddLabelAsync(Recordlabel recordlabel)
+        public async Task<ActionResult<Recordlabel>> AddLabel(Recordlabel recordlabel)
         {
             try
             {

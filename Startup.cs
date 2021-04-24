@@ -6,6 +6,7 @@ using Label.API.Config;
 using Label.API.DataContext;
 using Label.API.Repositories;
 using Label.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +33,7 @@ namespace Label.API
         {
 
             services.AddAutoMapper(typeof(Startup));
-            
+
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddDbContext<LabelContext>();
@@ -44,10 +45,26 @@ namespace Label.API
             });
             services.AddCors(options => { options.AddPolicy("AnyOrigin", builder => { builder.AllowAnyOrigin().AllowAnyMethod(); }); });
 
+
+
             services.AddTransient<ILabelContext, LabelContext>();
             services.AddTransient<IArtistRepository, ArtistRepository>();
+            services.AddTransient<IRecordlabelRepository, RecordlabelRepository>();
+            services.AddTransient<ISongRepository, SongRepository>();
 
             services.AddTransient<ILabelService, LabelService>();
+
+            services.AddMvc();
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-ynue-bw8.eu.auth0.com/";
+                options.Audience = "https://labelapi.com";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +79,9 @@ namespace Label.API
 
             app.UseHttpsRedirection();
 
+            // Testing
+
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -69,6 +89,19 @@ namespace Label.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+
+            app.UseStaticFiles();
+
+            // 2. Enable authentication middleware
+            app.UseAuthentication();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                  name: "default",
+                  template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

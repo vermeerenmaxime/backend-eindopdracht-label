@@ -72,38 +72,21 @@ namespace Label.API.DataContext
                 PhoneNumber = "+32470053774",
                 Email = "maxime6128@gmail.com"
             });
+            modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
+            {
+                RecordLabelId = Guid.NewGuid(),
+                LabelName = "Loud Memory",
+                Country = "Belgium",
 
+            });
+            modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
+            {
+                RecordLabelId = Guid.NewGuid(),
+                LabelName = "Deep Memory",
+                Country = "Belgium",
 
-            // modelBuilder.Entity<Brand>().HasData(new Brand()
-            // {
-            //     BrandId = 2,
-            //     Name = "CONVERSE"
-            // });
+            });
 
-            // modelBuilder.Entity<Brand>().HasData(new Brand()
-            // {
-            //     BrandId = 3,
-            //     Name = "JORDAN"
-            // });
-
-            // modelBuilder.Entity<Occasion>().HasData(new Occasion()
-            // {
-            //     OccasionId = 1,
-            //     Description = "Sports"
-            // });
-
-
-            // modelBuilder.Entity<Occasion>().HasData(new Occasion()
-            // {
-            //     OccasionId = 2,
-            //     Description = "Casual"
-            // });
-
-            // modelBuilder.Entity<Occasion>().HasData(new Occasion()
-            // {
-            //     OccasionId = 3,
-            //     Description = "Skate"
-            // });
         }
 
     }
