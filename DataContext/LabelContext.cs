@@ -20,6 +20,7 @@ namespace Label.API.DataContext
         DbSet<Artist> Artists { get; set; }
         DbSet<Song> Songs { get; set; }
         DbSet<Recordlabel> Recordlabels { get; set; }
+        DbSet<SongArtist> SongArtists { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 
@@ -49,8 +50,8 @@ namespace Label.API.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SongArtist>()
-               .HasKey(cs => new { cs.SongId, cs.ArtistId });
+            // modelBuilder.Entity<SongArtist>()
+            //    .HasKey(cs => new { cs.SongId, cs.ArtistId });
 
             modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
             {

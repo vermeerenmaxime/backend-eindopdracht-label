@@ -23,6 +23,7 @@ namespace Label.API.Services
         Task<List<Song>> GetSongs();
         Task<SongAddDTO> AddSong(SongAddDTO song);
         Task<List<Song>> GetSongsByRecordlabelName(string labelName);
+        Task<Recordlabel> GetRecordlabelById(Guid recordLabelId);
     }
 
     public class LabelService : ILabelService
@@ -84,18 +85,26 @@ namespace Label.API.Services
                 try
                 {
                     newSong.SongId = Guid.NewGuid();
-                    newSong.Artists = new List<Artist>();
+                    List<Artist> artists = new List<Artist>();
                     foreach (var artistId in song.ArtistIds)
                     {
-                        Artist artist = await GetArtistByArtistId(artistId);
-                        artist.ArtistId = Guid.NewGuid();
-                        newSong.Artists.Add(artist);
+
+                        // Artist artist = await GetArtistByArtistId(artistId);
+                        // artist.ArtistId = Guid.NewGuid();
+                        // artists.Add(artist);
+
+                        await _songRepository.AddSongArtist(new SongArtist()
+                        {
+                            SongArtistId = Guid.NewGuid(),
+                            SongId = newSong.SongId,
+                            ArtistId = artistId,
+                        });
                     }
                     try
                     {
-                        newSong.Recordlabel = await GetRecordlabelById(song.RecordLabelId);
+                        Recordlabel recordlabel = await GetRecordlabelById(song.RecordLabelId);
 
-                        newSong.LabelId = newSong.Recordlabel.RecordLabelId;
+                        newSong.LabelId = recordlabel.RecordLabelId;
 
                         await _songRepository.AddSong(newSong);
                         return song;

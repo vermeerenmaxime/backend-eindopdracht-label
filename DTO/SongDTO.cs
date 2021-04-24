@@ -17,6 +17,18 @@ namespace Label.API.DTO
         public Recordlabel Recordlabel { get; set; }
         public List<Guid> Artists { get; set; }
     }
+    public class SongGetDTO
+    {
+        public Guid SongId { get; set; }
+        public string SongName { get; set; }
+        public string ReleaseDate { get; set; }
+        public string CoverArt { get; set; }
+        public string Description { get; set; }
+        public string Lyrics { get; set; }
+        public Guid LabelId { get; set; }
+        public Recordlabel Recordlabel { get; set; }
+        public List<Guid> Artists { get; set; }
+    }
     public class SongAddDTO
     {
         public string SongName { get; set; }

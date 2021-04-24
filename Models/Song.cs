@@ -14,9 +14,7 @@ namespace Label.API.Models
         public string Lyrics { get; set; }
         [JsonIgnore]
         public Guid LabelId { get; set; }
-
         public Recordlabel Recordlabel { get; set; }
-
         public List<Artist> Artists { get; set; }
     }
 }
