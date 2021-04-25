@@ -124,8 +124,8 @@ namespace Label.API.Controllers
             }
         }
         [HttpGet]
-        [Route("songs/label/{recordlabelName}")]
-        public async Task<ActionResult<List<Song>>> GetSongsByRecordlabelNameAsync(string labelName)
+        [Route("songs/label/{labelName}")]
+        public async Task<ActionResult<List<Song>>> GetSongsByRecordlabelName(string labelName)
         {
             try
             {
@@ -136,22 +136,7 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
-        // [HttpPost]
-        // [Route("song")]
-        // public async Task<ActionResult<Song>> AddSong(Song song)
-        // {
-        //     try
-        //     {
-        //         return new OkObjectResult(await _labelService.AddSong(song));
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         // return new StatusCodeResult(500);
-        //         // Console.WriteLine(ex);
-        //         // return new StatusCodeResult(500);
-        //         throw ex;
-        //     }
-        // }
+
         [HttpPost]
         [Route("song")]
         public async Task<ActionResult<SongAddDTO>> AddSong(SongAddDTO song)
@@ -173,9 +158,16 @@ namespace Label.API.Controllers
         }
         [HttpGet]
         [Route("albums")]
-        public ActionResult<List<Album>> GetAlbums()
+        public async Task<ActionResult<List<Album>>> GetAlbumsAsync()
         {
-            return new List<Album>();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetAlbums());
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
         [HttpGet]
         [Route("albums/{artistName}")]
@@ -211,8 +203,8 @@ namespace Label.API.Controllers
             }
         }
         [HttpGet]
-        [Route("recordabel/name/{labelName}")]
-        public async Task<ActionResult<Recordlabel>> GetRecordlabelByLabelName(String labelName)
+        [Route("recordlabel/name/{labelName}")]
+        public async Task<ActionResult<Recordlabel>> GetRecordlabelByLabelName(string labelName)
         {
             try
             {
@@ -225,7 +217,7 @@ namespace Label.API.Controllers
             }
         }
         [HttpGet]
-        [Route("recordabel/id/{recordlabelId}")]
+        [Route("recordlabel/id/{recordlabelId}")]
         public async Task<ActionResult<Recordlabel>> GetRecordlabelById(Guid recordlabelId)
         {
             try

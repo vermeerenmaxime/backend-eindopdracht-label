@@ -15,6 +15,7 @@ namespace Label.API.Repositories
         Task<Song> AddSong(Song song);
         Task<Song> GetSongBySongId(Guid songId);
         Task<SongArtist> AddSongArtist(SongArtist songArtist);
+        Task<List<SongArtist>> GetSongArtistsBySongId(Guid songId);
     }
 
     public class SongRepository : ISongRepository
@@ -28,15 +29,10 @@ namespace Label.API.Repositories
 
         public async Task<List<Song>> GetSongs()
         {
-            try
-            {
-                return await _context.Songs.ToListAsync();
 
-            }
-            catch (System.Exception ex)
-            {
-                throw ex;
-            }
+            List<Song> songs = await _context.Songs.ToListAsync();
+
+            return songs;
 
         }
 
@@ -46,6 +42,10 @@ namespace Label.API.Repositories
             await _context.SaveChangesAsync();
             return song;
         }
+        public async Task<List<SongArtist>> GetSongArtistsBySongId(Guid songId)
+        {
+            return await _context.SongArtists.Where(s => s.SongId == songId).ToListAsync();
+        }
         public async Task<SongArtist> AddSongArtist(SongArtist songArtist)
         {
             await _context.SongArtists.AddAsync(songArtist);
@@ -54,29 +54,14 @@ namespace Label.API.Repositories
         }
         public async Task<List<Song>> GetSongsBySongName(string songName)
         {
-            try
-            {
-                List<Song> songsBySongName = new List<Song>();
-                List<Song> songs = new List<Song>();
-                songs = await _context.Songs.ToListAsync();
+            return await _context.Songs.Where(s => s.SongName == songName).ToListAsync();
 
-                foreach (var song in songs)
-                {
-                    songsBySongName.Add(await _context.Songs.Where(s => s.SongName == songName).SingleOrDefaultAsync());
-                }
-                return songsBySongName;
-                // return await _context.Songs.ToListAsync();
-            }
-            catch (System.Exception ex)
-            {
-                throw ex;
-            }
         }
         public async Task<Song> GetSongBySongId(Guid songId)
         {
             try
             {
-                return await _context.Songs.Where(s => s.SongId == songId).SingleOrDefaultAsync();
+                return await _context.Songs.Where(a => a.SongId == songId).SingleOrDefaultAsync();
             }
             catch (System.Exception ex)
             {
