@@ -15,6 +15,7 @@ namespace Label.API.Repositories
         Task<Artist> GetArtistByArtistName(string artistName);
         Task<List<Artist>> GetArtists();
         Task<Artist> GetArtistByArtistId(Guid artistId);
+        Task<Artist> DeleteArtist(Artist artist);
     }
 
     public class ArtistRepository : IArtistRepository
@@ -66,6 +67,10 @@ namespace Label.API.Repositories
             await _context.SaveChangesAsync();
             return artist;
 
+        }
+        public async Task<Artist> DeleteArtist(Artist artist)
+        {
+            return artist;
         }
     }
 }

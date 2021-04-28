@@ -43,7 +43,7 @@ namespace Label.API.Migrations
                     b.Property<string>("AlbumName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ArtistId")
+                    b.Property<Guid>("ArtistId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReleaseDate")
@@ -54,6 +54,24 @@ namespace Label.API.Migrations
                     b.HasIndex("ArtistId");
 
                     b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("Label.API.Models.AlbumSong", b =>
+                {
+                    b.Property<Guid>("AlbumId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SongId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AlbumSongId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AlbumId", "SongId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("AlbumSongs");
                 });
 
             modelBuilder.Entity("Label.API.Models.Artist", b =>
@@ -101,7 +119,7 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            ArtistId = new Guid("ecf4fa1b-1595-4d47-a9e6-6ddf9d4bcdc3"),
+                            ArtistId = new Guid("ef52121a-dffb-4bc9-a983-9ff59b90962a"),
                             ArtistName = "Mave",
                             Birthdate = "08/08/2001",
                             Country = "Belgium",
@@ -134,19 +152,13 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            RecordLabelId = new Guid("94419947-98ed-4630-ac5d-17d47ab26547"),
+                            RecordLabelId = new Guid("39b0cb5f-ec33-4a0a-ad3c-08b16d81a869"),
                             Country = "Belgium",
                             LabelName = "Loud Memory Records"
                         },
                         new
                         {
-                            RecordLabelId = new Guid("a95252fd-eb92-4008-b8c6-9632bf9a578c"),
-                            Country = "Belgium",
-                            LabelName = "Loud Memory"
-                        },
-                        new
-                        {
-                            RecordLabelId = new Guid("15196839-9d14-4eb1-a52c-679e7de6d9dd"),
+                            RecordLabelId = new Guid("6c5db577-8683-4039-b964-c34b19c4a4d6"),
                             Country = "Belgium",
                             LabelName = "Deep Memory"
                         });
@@ -226,9 +238,24 @@ namespace Label.API.Migrations
 
             modelBuilder.Entity("Label.API.Models.Album", b =>
                 {
-                    b.HasOne("Label.API.Models.Artist", null)
+                    b.HasOne("Label.API.Models.Artist", "Artist")
                         .WithMany("Albums")
-                        .HasForeignKey("ArtistId");
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+                });
+
+            modelBuilder.Entity("Label.API.Models.AlbumSong", b =>
+                {
+                    b.HasOne("Label.API.Models.Song", "Song")
+                        .WithMany()
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Song");
                 });
 
             modelBuilder.Entity("Label.API.Models.Song", b =>

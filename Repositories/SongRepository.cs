@@ -51,7 +51,7 @@ namespace Label.API.Repositories
             await _context.SongArtists.AddAsync(songArtist);
             await _context.SaveChangesAsync();
             return songArtist;
-        }
+        }   
         public async Task<List<Song>> GetSongsBySongName(string songName)
         {
             return await _context.Songs.Where(s => s.SongName == songName).ToListAsync();

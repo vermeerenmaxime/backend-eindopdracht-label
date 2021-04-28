@@ -12,9 +12,10 @@ namespace Label.API.Services
     public interface ILabelService
     {
 
-        Task<Artist> AddArtist(Artist artist);
         Task<Artist> GetArtistByArtistName(string artistName);
         Task<List<Artist>> GetArtists();
+        Task<Artist> AddArtist(Artist artist);
+        Task<Artist> DeleteArtist(Artist artist);
         Task<Recordlabel> GetRecordlabelByName(string labelName);
         Task<Recordlabel> AddRecordlabel(Recordlabel recordlabel);
         Task<List<Recordlabel>> GetRecordlabels();
@@ -26,6 +27,8 @@ namespace Label.API.Services
         Task<List<Song>> GetSongsByRecordlabelName(string labelName);
         Task<Recordlabel> GetRecordlabelById(Guid recordLabelId);
         Task<List<Album>> GetAlbums();
+        Task<AlbumDTO> AddAlbum(AlbumDTO album);
+        Task<AlbumAddSongDTO> AddSongToAlbum(AlbumAddSongDTO album);
     }
 
     public class LabelService : ILabelService
@@ -33,7 +36,6 @@ namespace Label.API.Services
         private IArtistRepository _artistRepository;
         private IRecordlabelRepository _recordlabelRepository;
         private ISongRepository _songRepository;
-
         private IAlbumRepository _albumRepository;
         private IMapper _mapper;
 
@@ -64,6 +66,12 @@ namespace Label.API.Services
             // Artist newArtist = _mapper.Map<Artist>(artist);
 
             await _artistRepository.AddArtist(artist);
+            return artist;
+        }
+        public async Task<Artist> DeleteArtist(Artist artist)
+        {
+
+            await _artistRepository.DeleteArtist(artist);
             return artist;
         }
         public async Task<List<Song>> GetSongs()
@@ -146,50 +154,35 @@ namespace Label.API.Services
             {
                 // voor DTO
                 Song newSong = _mapper.Map<Song>(song);
-                try
+                newSong.SongId = Guid.NewGuid();
+
+                foreach (var artistId in song.ArtistIds)
                 {
-                    newSong.SongId = Guid.NewGuid();
-                    List<Artist> artists = new List<Artist>();
-                    foreach (var artistId in song.ArtistIds)
+
+                    Artist artist = await GetArtistByArtistId(artistId);
+
+                    if (artist != null)
                     {
-
-                        Artist artist = await GetArtistByArtistId(artistId);
-                        // artist.ArtistId = Guid.NewGuid();
-                        // artists.Add(artist);
-
-                        if (artist != null)
+                        await _songRepository.AddSongArtist(new SongArtist()
                         {
-                            await _songRepository.AddSongArtist(new SongArtist()
-                            {
-                                SongArtistId = Guid.NewGuid(),
-                                SongId = newSong.SongId,
-                                ArtistId = artistId,
-                            });
-                        }
-                        else
-                        {
-                            // Artiest bestaat niet, maak eerst een artiest aan
-                        }
-
+                            SongArtistId = Guid.NewGuid(),
+                            SongId = newSong.SongId,
+                            ArtistId = artistId,
+                        });
                     }
-                    try
+                    else
                     {
-                        Recordlabel recordlabel = await GetRecordlabelById(song.RecordLabelId);
-                        if (recordlabel != null) newSong.LabelId = recordlabel.RecordLabelId;
+                        // Artiest bestaat niet, maak eerst een artiest aan
+                    }
 
-                        await _songRepository.AddSong(newSong);
-                        return song;
-                    }
-                    catch (Exception ex)
-                    {
-                        // ex.Message = "JsonConvert.SerializeObject("error")";
-                        throw ex;
-                    }
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+
+                Recordlabel recordlabel = await GetRecordlabelById(song.RecordLabelId);
+                if (recordlabel != null) newSong.LabelId = recordlabel.RecordLabelId;
+
+                await _songRepository.AddSong(newSong);
+                return song;
+
 
             }
             catch (Exception ex)
@@ -235,9 +228,111 @@ namespace Label.API.Services
             await _recordlabelRepository.AddRecordlabel(recordlabel);
             return recordlabel;
         }
+        // public async Task<List<Album>> GetAlbums()
+        // {
+        //     List<Album> albums = await _albumRepository.GetAlbums();
+
+        //     foreach (var album in albums)
+        //     {
+        //         Artist artist = await _artistRepository.GetArtistByArtistId(album.ArtistId);
+
+        //         if (artist != null)
+        //         {
+        //             album.Artist = artist;
+        //             List<Song> songs = new List<Song>();
+        //             List<AlbumSong> albumSongs = await _albumRepository.GetAlbumSongsByAlbumId(album.AlbumId);
+        //             if (albumSongs != null)
+        //             {
+        //                 foreach (var albumSong in albumSongs)
+        //                 {
+        //                     Song song = await GetSongBySongId(albumSong.SongId);
+        //                     if (song != null) { songs.Add(song); }
+        //                 }
+        //                 album.Songs = songs;
+        //             }
+        //             else
+        //             {
+        //                 // Error test
+        //                 // throw IActionResult<List<Song>>("Album bevat geen songs");
+        //             }
+        //         }
+        //         else
+        //         {
+        //             // Error test
+        //             // throw IActionResult<List<Song>>("Artist is niet gevonden");
+        //         }
+
+        //     }
+
+        //     return albums;
+        // }
+
         public async Task<List<Album>> GetAlbums()
         {
             return await _albumRepository.GetAlbums();
+        }
+        public async Task<Album> GetAlbumByAlbumId(Guid albumId)
+        {
+            Album album = await _albumRepository.GetAlbumByAlbumId(albumId);
+            List<AlbumSong> albumSongs = await _albumRepository.GetAlbumSongsByAlbumId(album.AlbumId);
+            album.Songs = new List<Song>();
+            foreach (var song in album.Songs)
+            {
+                List<Song> songs = new List<Song>();
+                album.Songs = songs;
+            }
+
+            return album;
+        }
+        public async Task<AlbumDTO> AddAlbum(AlbumDTO album)
+        {
+            Album newAlbum = _mapper.Map<Album>(album);
+            newAlbum.AlbumId = Guid.NewGuid();
+            // newAlbum.Songs = new List<Song>();
+            // newAlbum.Artist = new Artist();
+
+            foreach (var songId in album.SongIds)
+            {
+                Song song = await GetSongBySongId(songId);
+                if (song != null)
+                {
+                    await _albumRepository.AddAlbumSong(new AlbumSong()
+                    {
+                        AlbumSongId = Guid.NewGuid(),
+                        SongId = songId,
+                        AlbumId = newAlbum.AlbumId,
+                    });
+
+                }
+                // newAlbum.Songs.Add(song);
+            }
+
+            Artist artist = await GetArtistByArtistId(album.ArtistId);
+            if (artist != null)
+            {
+                newAlbum.ArtistId = artist.ArtistId;
+            }
+
+            await _albumRepository.AddAlbum(newAlbum);
+            return album;
+        }
+
+        // UNFINISHED UNTESTED
+        public async Task<AlbumAddSongDTO> AddSongToAlbum(AlbumAddSongDTO album)
+        {
+            Album newAlbum = await _albumRepository.GetAlbumByAlbumId(album.AlbumId);
+            Song newSong = await _songRepository.GetSongBySongId(album.SongId);
+            if (newAlbum != null && newSong != null)
+            {
+                await _albumRepository.AddAlbumSong(new AlbumSong()
+                {
+                    AlbumSongId = Guid.NewGuid(),
+                    SongId = album.SongId,
+                    AlbumId = album.AlbumId,
+                });
+            }
+
+            return album;
         }
 
     }

@@ -6,9 +6,11 @@ using Label.API.DTO;
 using Label.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Label.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api")]
     public class LabelController : ControllerBase
@@ -65,6 +67,7 @@ namespace Label.API.Controllers
             };
         }
 
+
         [HttpPost]
         [Route("artist")]
         public async Task<ActionResult<Artist>> AddArtist(Artist artist)
@@ -79,7 +82,20 @@ namespace Label.API.Controllers
             }
             // return new Artist();
         }
-
+        [HttpDelete]
+        [Route("artist")]
+        public async Task<ActionResult<Artist>> DeleteArtist(Artist artist)
+        {
+            try
+            {
+                return new OkObjectResult(await _labelService.DeleteArtist(artist));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
+            // return new Artist();
+        }
 
         [HttpGet]
         [Route("songs")]
@@ -158,7 +174,7 @@ namespace Label.API.Controllers
         }
         [HttpGet]
         [Route("albums")]
-        public async Task<ActionResult<List<Album>>> GetAlbumsAsync()
+        public async Task<ActionResult<List<Album>>> GetAlbums()
         {
             try
             {
@@ -184,10 +200,30 @@ namespace Label.API.Controllers
         }
         [HttpPost]
         [Route("album")]
-        public ActionResult<Album> AddAlbum()
+        public async Task<ActionResult<AlbumDTO>> AddAlbum(AlbumDTO album)
         {
-            return new Album();
+            try
+            {
+                return new OkObjectResult(await _labelService.AddAlbum(album));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+        // [HttpPost]
+        // [Route("album")]
+        // public async Task<ActionResult<AlbumAddSongDTO>> AddSongToAlbum(AlbumAddSongDTO album)
+        // {
+        //     try
+        //     {
+        //         return new OkObjectResult(await _labelService.AddSongToAlbum(album));
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         throw ex;
+        //     }
+        // }
         [HttpGet]
         [Route("recordlabels")]
         public async Task<ActionResult<List<Recordlabel>>> GetRecordlabels()

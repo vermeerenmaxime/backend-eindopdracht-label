@@ -27,5 +27,10 @@ namespace Label.API.Models
         public List<Album> Albums { get; set; }
         [JsonIgnore]
         public List<SongArtist> SongArtist { get; set; }
+
+        public static implicit operator Artist(AlbumSong v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

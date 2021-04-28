@@ -9,7 +9,7 @@ namespace Label.API.DTO
         public AutoMapping()
         {
 
-            CreateMap<Album, AlbumDTO>();
+            CreateMap<AlbumDTO, Album>();
             CreateMap<Artist, ArtistDTO>();
             CreateMap<Recordlabel, RecordlabelDTO>();
             // CreateMap<Song, SongAddDTO>();

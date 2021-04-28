@@ -17,6 +17,7 @@ namespace Label.API.DataContext
     public interface ILabelContext
     {
         DbSet<Album> Albums { get; set; }
+        DbSet<AlbumSong> AlbumSongs { get; set; }
         DbSet<Artist> Artists { get; set; }
         DbSet<Song> Songs { get; set; }
         DbSet<Recordlabel> Recordlabels { get; set; }
@@ -27,6 +28,7 @@ namespace Label.API.DataContext
     public class LabelContext : DbContext, ILabelContext
     {
         public DbSet<Album> Albums { get; set; }
+        public DbSet<AlbumSong> AlbumSongs { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Song> Songs { get; set; }
         public DbSet<SongArtist> SongArtists { get; set; }
@@ -50,13 +52,21 @@ namespace Label.API.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<SongArtist>()
-            //    .HasKey(cs => new { cs.SongId, cs.ArtistId });
+            modelBuilder.Entity<AlbumSong>()
+               .HasKey(cs => new { cs.AlbumId, cs.SongId });
+            modelBuilder.Entity<SongArtist>()
+               .HasKey(cs => new { cs.SongId, cs.ArtistId });
 
             modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
             {
-                RecordLabelId = Guid.NewGuid(),
+                RecordLabelId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                 LabelName = "Loud Memory Records",
+                Country = "Belgium",
+            });
+            modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
+            {
+                RecordLabelId = Guid.NewGuid(),
+                LabelName = "Deep Memory",
                 Country = "Belgium",
             });
             modelBuilder.Entity<Artist>().HasData(new Artist()
@@ -73,20 +83,26 @@ namespace Label.API.DataContext
                 PhoneNumber = "+32470053774",
                 Email = "maxime6128@gmail.com"
             });
-            modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
+            modelBuilder.Entity<Song>().HasData(new Song()
             {
-                RecordLabelId = Guid.NewGuid(),
-                LabelName = "Loud Memory",
-                Country = "Belgium",
+                SongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                ReleaseDate = "22/08/2021",
+                SongName = "Tunnelvision",
+                CoverArt = "String",
+                Description = "Joehooee",
+                Lyrics = "You gave me tunnelvision",
+                LabelId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+    
+            });
+            modelBuilder.Entity<Album>().HasData(new Album()
+            {
+                AlbumId = Guid.NewGuid(),
+                AlbumName = "Insanium",
+                ReleaseDate = "22/08/2021",
+                ArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
 
             });
-            modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
-            {
-                RecordLabelId = Guid.NewGuid(),
-                LabelName = "Deep Memory",
-                Country = "Belgium",
 
-            });
 
         }
 

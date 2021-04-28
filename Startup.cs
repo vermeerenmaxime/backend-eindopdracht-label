@@ -39,32 +39,32 @@ namespace Label.API
             services.AddDbContext<LabelContext>();
 
             services.AddControllers();
+
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-ynue-bw8.eu.auth0.com/";
+                options.Audience = "https://labelapi.com";
+            });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Label.API", Version = "v1" });
             });
             services.AddCors(options => { options.AddPolicy("AnyOrigin", builder => { builder.AllowAnyOrigin().AllowAnyMethod(); }); });
 
-
-
             services.AddTransient<ILabelContext, LabelContext>();
             services.AddTransient<IArtistRepository, ArtistRepository>();
             services.AddTransient<IRecordlabelRepository, RecordlabelRepository>();
             services.AddTransient<ISongRepository, SongRepository>();
+            services.AddTransient<IAlbumRepository, AlbumRepository>();
 
             services.AddTransient<ILabelService, LabelService>();
 
-            // services.AddMvc();
-            // 1. Add Authentication Services
-            // services.AddAuthentication(options =>
-            // {
-            //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            // }).AddJwtBearer(options =>
-            // {
-            //     options.Authority = "https://dev-ynue-bw8.eu.auth0.com/";
-            //     options.Audience = "https://labelapi.com";
-            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,6 +84,7 @@ namespace Label.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -95,7 +96,6 @@ namespace Label.API
             // app.UseStaticFiles();
 
             // 2. Enable authentication middleware
-            // app.UseAuthentication();
 
             // app.UseMvc(routes =>
             // {
