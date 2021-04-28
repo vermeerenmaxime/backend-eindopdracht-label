@@ -25,7 +25,3 @@ services:
       - 5001:5000
     depends_on: 
       - db
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080

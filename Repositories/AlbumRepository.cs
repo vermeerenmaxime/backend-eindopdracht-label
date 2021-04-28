@@ -15,6 +15,7 @@ namespace Label.API.Repositories
         Task<Album> AddAlbum(Album album);
         Task<List<AlbumSong>> GetAlbumSongsByAlbumId(Guid albumId);
         Task<AlbumSong> AddAlbumSong(AlbumSong albumSong);
+        Task<List<Album>> GetAlbumByArtistId(Guid artistId);
     }
 
     public class AlbumRepository : IAlbumRepository
@@ -41,18 +42,30 @@ namespace Label.API.Repositories
         {
             try
             {
-                return await _context.Albums.Include(a => a.Artist).Include(s => s.Songs).ThenInclude(a => a.Artists).ToListAsync();
+                return await _context.Albums.Include(a => a.Artist).Include(a => a.Songs).ToListAsync();
             }
             catch (System.Exception ex)
-            {   
+            {
                 throw ex;
             }
         }
+
         public async Task<Album> GetAlbumByAlbumId(Guid albumId)
         {
             try
             {
                 return await _context.Albums.Where(a => a.AlbumId == albumId).SingleOrDefaultAsync();
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<List<Album>> GetAlbumByArtistId(Guid artistId)
+        {
+            try
+            {
+                return await _context.Albums.Where(a => a.ArtistId == artistId).ToListAsync();
             }
             catch (System.Exception ex)
             {

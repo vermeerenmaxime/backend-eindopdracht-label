@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Label.API.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api")]
     public class LabelController : ControllerBase
@@ -187,9 +187,16 @@ namespace Label.API.Controllers
         }
         [HttpGet]
         [Route("albums/{artistName}")]
-        public ActionResult<List<Album>> GetAlbumsByArtist()
+        public async Task<ActionResult<List<Album>>> GetAlbumsByArtistName(string artistName)
         {
-            return new List<Album>();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetAlbumsByArtistName(artistName));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
         // ! Albums van artiesten kunnen dezelfde naam hebben
         [HttpGet]

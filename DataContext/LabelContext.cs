@@ -20,8 +20,8 @@ namespace Label.API.DataContext
         DbSet<AlbumSong> AlbumSongs { get; set; }
         DbSet<Artist> Artists { get; set; }
         DbSet<Song> Songs { get; set; }
-        DbSet<Recordlabel> Recordlabels { get; set; }
         DbSet<SongArtist> SongArtists { get; set; }
+        DbSet<Recordlabel> Recordlabels { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 
@@ -54,8 +54,14 @@ namespace Label.API.DataContext
         {
             modelBuilder.Entity<AlbumSong>()
                .HasKey(cs => new { cs.AlbumId, cs.SongId });
+
             modelBuilder.Entity<SongArtist>()
                .HasKey(cs => new { cs.SongId, cs.ArtistId });
+
+            // modelBuilder.Entity<Album>()
+            // .HasMany(p => p.Songs)
+            // .WithOne();
+
 
             modelBuilder.Entity<Recordlabel>().HasData(new Recordlabel()
             {
@@ -71,9 +77,23 @@ namespace Label.API.DataContext
             });
             modelBuilder.Entity<Artist>().HasData(new Artist()
             {
-                ArtistId = Guid.NewGuid(),
+                ArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                 ArtistName = "Mave",
                 FirstName = "Maxime",
+                LastName = "Vermeeren",
+                Birthdate = "08/08/2001",
+                Country = "Belgium",
+                StreetName = "Deinzestraat",
+                HouseNumber = "175",
+                PostalCode = "9700",
+                PhoneNumber = "+32470053774",
+                Email = "maxime6128@gmail.com"
+            });
+            modelBuilder.Entity<Artist>().HasData(new Artist()
+            {
+                ArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                ArtistName = "Max Kilian",
+                FirstName = "Kilian",
                 LastName = "Vermeeren",
                 Birthdate = "08/08/2001",
                 Country = "Belgium",
@@ -92,15 +112,47 @@ namespace Label.API.DataContext
                 Description = "Joehooee",
                 Lyrics = "You gave me tunnelvision",
                 LabelId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-    
+            });
+            modelBuilder.Entity<Song>().HasData(new Song()
+            {
+                SongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                ReleaseDate = "22/08/2021",
+                SongName = "Be alive",
+                CoverArt = "String",
+                Description = "make me feel alivee",
+                Lyrics = "Take me to another room",
+                LabelId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+            });
+            modelBuilder.Entity<SongArtist>().HasData(new SongArtist()
+            {
+                SongArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                SongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                ArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+            });
+            modelBuilder.Entity<SongArtist>().HasData(new SongArtist()
+            {
+                SongArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                SongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                ArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
             });
             modelBuilder.Entity<Album>().HasData(new Album()
             {
-                AlbumId = Guid.NewGuid(),
+                AlbumId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                 AlbumName = "Insanium",
                 ReleaseDate = "22/08/2021",
                 ArtistId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-
+            });
+            modelBuilder.Entity<AlbumSong>().HasData(new AlbumSong()
+            {
+                AlbumSongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                AlbumId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                SongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+            });
+            modelBuilder.Entity<AlbumSong>().HasData(new AlbumSong()
+            {
+                AlbumSongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                AlbumId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                SongId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
             });
 
 

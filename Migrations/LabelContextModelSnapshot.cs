@@ -54,6 +54,15 @@ namespace Label.API.Migrations
                     b.HasIndex("ArtistId");
 
                     b.ToTable("Albums");
+
+                    b.HasData(
+                        new
+                        {
+                            AlbumId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            AlbumName = "Insanium",
+                            ArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            ReleaseDate = "22/08/2021"
+                        });
                 });
 
             modelBuilder.Entity("Label.API.Models.AlbumSong", b =>
@@ -72,6 +81,20 @@ namespace Label.API.Migrations
                     b.HasIndex("SongId");
 
                     b.ToTable("AlbumSongs");
+
+                    b.HasData(
+                        new
+                        {
+                            AlbumId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            SongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            AlbumSongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")
+                        },
+                        new
+                        {
+                            AlbumId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            SongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                            AlbumSongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")
+                        });
                 });
 
             modelBuilder.Entity("Label.API.Models.Artist", b =>
@@ -119,12 +142,26 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            ArtistId = new Guid("ef52121a-dffb-4bc9-a983-9ff59b90962a"),
+                            ArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                             ArtistName = "Mave",
                             Birthdate = "08/08/2001",
                             Country = "Belgium",
                             Email = "maxime6128@gmail.com",
                             FirstName = "Maxime",
+                            HouseNumber = "175",
+                            LastName = "Vermeeren",
+                            PhoneNumber = "+32470053774",
+                            PostalCode = "9700",
+                            StreetName = "Deinzestraat"
+                        },
+                        new
+                        {
+                            ArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                            ArtistName = "Max Kilian",
+                            Birthdate = "08/08/2001",
+                            Country = "Belgium",
+                            Email = "maxime6128@gmail.com",
+                            FirstName = "Kilian",
                             HouseNumber = "175",
                             LastName = "Vermeeren",
                             PhoneNumber = "+32470053774",
@@ -152,13 +189,13 @@ namespace Label.API.Migrations
                     b.HasData(
                         new
                         {
-                            RecordLabelId = new Guid("39b0cb5f-ec33-4a0a-ad3c-08b16d81a869"),
+                            RecordLabelId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                             Country = "Belgium",
                             LabelName = "Loud Memory Records"
                         },
                         new
                         {
-                            RecordLabelId = new Guid("6c5db577-8683-4039-b964-c34b19c4a4d6"),
+                            RecordLabelId = new Guid("a966d99f-cf39-434e-8e17-ab9f52cb683b"),
                             Country = "Belgium",
                             LabelName = "Deep Memory"
                         });
@@ -201,6 +238,28 @@ namespace Label.API.Migrations
                     b.HasIndex("RecordLabelId");
 
                     b.ToTable("Songs");
+
+                    b.HasData(
+                        new
+                        {
+                            SongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            CoverArt = "String",
+                            Description = "Joehooee",
+                            LabelId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            Lyrics = "You gave me tunnelvision",
+                            ReleaseDate = "22/08/2021",
+                            SongName = "Tunnelvision"
+                        },
+                        new
+                        {
+                            SongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                            CoverArt = "String",
+                            Description = "make me feel alivee",
+                            LabelId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            Lyrics = "Take me to another room",
+                            ReleaseDate = "22/08/2021",
+                            SongName = "Be alive"
+                        });
                 });
 
             modelBuilder.Entity("Label.API.Models.SongArtist", b =>
@@ -219,6 +278,20 @@ namespace Label.API.Migrations
                     b.HasIndex("ArtistId");
 
                     b.ToTable("SongArtists");
+
+                    b.HasData(
+                        new
+                        {
+                            SongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            ArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            SongArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")
+                        },
+                        new
+                        {
+                            SongId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            ArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa5"),
+                            SongArtistId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa5")
+                        });
                 });
 
             modelBuilder.Entity("ArtistSong", b =>
@@ -250,7 +323,7 @@ namespace Label.API.Migrations
             modelBuilder.Entity("Label.API.Models.AlbumSong", b =>
                 {
                     b.HasOne("Label.API.Models.Song", "Song")
-                        .WithMany()
+                        .WithMany("AlbumSong")
                         .HasForeignKey("SongId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -297,6 +370,11 @@ namespace Label.API.Migrations
             modelBuilder.Entity("Label.API.Models.Recordlabel", b =>
                 {
                     b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("Label.API.Models.Song", b =>
+                {
+                    b.Navigation("AlbumSong");
                 });
 #pragma warning restore 612, 618
         }
