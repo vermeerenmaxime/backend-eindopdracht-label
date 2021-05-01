@@ -16,6 +16,7 @@ namespace Label.API.Repositories
         Task<Song> GetSongBySongId(Guid songId);
         Task<SongArtist> AddSongArtist(SongArtist songArtist);
         Task<List<SongArtist>> GetSongArtistsBySongId(Guid songId);
+        Task<Song> UpdateSong(Song song);
     }
 
     public class SongRepository : ISongRepository
@@ -39,6 +40,12 @@ namespace Label.API.Repositories
         public async Task<Song> AddSong(Song song)
         {
             await _context.Songs.AddAsync(song);
+            await _context.SaveChangesAsync();
+            return song;
+        }
+        public async Task<Song> UpdateSong(Song song)
+        {
+            _context.Songs.Update(song);
             await _context.SaveChangesAsync();
             return song;
         }

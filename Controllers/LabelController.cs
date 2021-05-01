@@ -38,6 +38,19 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
+        [HttpPut]
+        [Route("artist")]
+        public async Task<ActionResult<Artist>> UpdateArtist(Artist artist)
+        {
+            try
+            {
+                return new OkObjectResult(await _labelService.UpdateArtist(artist));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
+        }
         [HttpGet]
         [Route("artist/name/{artistName}")]
         public async Task<ActionResult<Artist>> GetArtistByArtistName(string artistName)
@@ -75,20 +88,6 @@ namespace Label.API.Controllers
             try
             {
                 return new OkObjectResult(await _labelService.AddArtist(artist));
-            }
-            catch (Exception ex)
-            {
-                return new StatusCodeResult(500);
-            }
-            // return new Artist();
-        }
-        [HttpDelete]
-        [Route("artist")]
-        public async Task<ActionResult<Artist>> DeleteArtist(Artist artist)
-        {
-            try
-            {
-                return new OkObjectResult(await _labelService.DeleteArtist(artist));
             }
             catch (Exception ex)
             {
@@ -166,6 +165,19 @@ namespace Label.API.Controllers
                 throw ex;
             }
         }
+        [HttpPut]
+        [Route("song")]
+        public async Task<ActionResult<SongUpdateDTO>> UpdateSong(SongUpdateDTO song)
+        {
+            try
+            {
+                return new OkObjectResult(await _labelService.UpdateSong(song));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpGet]
         [Route("album/id/{albumId}")]
         public ActionResult<Album> GetAlbumByAlbumId()
@@ -201,9 +213,16 @@ namespace Label.API.Controllers
         // ! Albums van artiesten kunnen dezelfde naam hebben
         [HttpGet]
         [Route("album/name/{albumName}")]
-        public ActionResult<List<Album>> GetAlbumByAlbumName()
+        public async Task<ActionResult<List<Album>>> GetAlbumsByAlbumName(string albumName)
         {
-            return new List<Album>();
+            try
+            {
+                return new OkObjectResult(await _labelService.GetAlbumsByAlbumName(albumName));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
         [HttpPost]
         [Route("album")]
@@ -218,19 +237,6 @@ namespace Label.API.Controllers
                 throw ex;
             }
         }
-        // [HttpPost]
-        // [Route("album")]
-        // public async Task<ActionResult<AlbumAddSongDTO>> AddSongToAlbum(AlbumAddSongDTO album)
-        // {
-        //     try
-        //     {
-        //         return new OkObjectResult(await _labelService.AddSongToAlbum(album));
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         throw ex;
-        //     }
-        // }
         [HttpGet]
         [Route("recordlabels")]
         public async Task<ActionResult<List<Recordlabel>>> GetRecordlabels()
