@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Label.API.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [ApiController]
     [Route("api")]
     public class LabelController : ControllerBase
@@ -23,8 +23,10 @@ namespace Label.API.Controllers
         {
             _logger = logger;
             _labelService = labelService;
+
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("artists")]
         public async Task<ActionResult<List<Artist>>> GetArtists()
@@ -51,6 +53,7 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("artist/name/{artistName}")]
         public async Task<ActionResult<Artist>> GetArtistByArtistName(string artistName)
@@ -95,7 +98,7 @@ namespace Label.API.Controllers
             }
             // return new Artist();
         }
-
+        [AllowAnonymous]
         [HttpGet]
         [Route("songs")]
         public async Task<ActionResult<List<Song>>> GetSongs()
@@ -110,6 +113,7 @@ namespace Label.API.Controllers
             }
 
         }
+        [AllowAnonymous]
         // ! List omdat er soms meerdere songs zijn met dezelfde naam!
         [HttpGet]
         [Route("song/name/{songName}")]
@@ -125,6 +129,7 @@ namespace Label.API.Controllers
             }
 
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("song/id/{songId}")]
         public async Task<ActionResult<Song>> GetSongBySongId(Guid songId)
@@ -138,6 +143,7 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("songs/label/{labelName}")]
         public async Task<ActionResult<List<Song>>> GetSongsByRecordlabelName(string labelName)
@@ -178,12 +184,14 @@ namespace Label.API.Controllers
                 throw ex;
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("album/id/{albumId}")]
         public ActionResult<Album> GetAlbumByAlbumId()
         {
             return new Album();
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("albums")]
         public async Task<ActionResult<List<Album>>> GetAlbums()
@@ -197,6 +205,7 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("albums/{artistName}")]
         public async Task<ActionResult<List<Album>>> GetAlbumsByArtistName(string artistName)
@@ -211,6 +220,7 @@ namespace Label.API.Controllers
             }
         }
         // ! Albums van artiesten kunnen dezelfde naam hebben
+        [AllowAnonymous]
         [HttpGet]
         [Route("album/name/{albumName}")]
         public async Task<ActionResult<List<Album>>> GetAlbumsByAlbumName(string albumName)
@@ -234,9 +244,10 @@ namespace Label.API.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return new StatusCodeResult(500);
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("recordlabels")]
         public async Task<ActionResult<List<Recordlabel>>> GetRecordlabels()
@@ -251,6 +262,7 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("recordlabel/name/{labelName}")]
         public async Task<ActionResult<Recordlabel>> GetRecordlabelByLabelName(string labelName)
@@ -265,6 +277,7 @@ namespace Label.API.Controllers
                 return new StatusCodeResult(500);
             }
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("recordlabel/id/{recordlabelId}")]
         public async Task<ActionResult<Recordlabel>> GetRecordlabelById(Guid recordlabelId)

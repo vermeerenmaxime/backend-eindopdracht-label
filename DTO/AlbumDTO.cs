@@ -11,6 +11,13 @@ namespace Label.API.DTO
         public Guid ArtistId { get; set; }
         public List<Guid> SongIds { get; set; }
     }
+
+    public class AlbumGetDTO
+    {
+        public Guid AlbumId { get; set; }
+        public string AlbumName { get; set; }
+        public string ReleaseDate { get; set; }
+    }
     public class AlbumAddSongDTO
     {
         public Guid AlbumId { get; set; }

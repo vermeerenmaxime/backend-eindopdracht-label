@@ -17,6 +17,7 @@ namespace Label.API.Repositories
         Task<SongArtist> AddSongArtist(SongArtist songArtist);
         Task<List<SongArtist>> GetSongArtistsBySongId(Guid songId);
         Task<Song> UpdateSong(Song song);
+        // Task<List<Song>> GetSongsByRecordlabelName(string labelName);
     }
 
     public class SongRepository : ISongRepository
@@ -58,7 +59,7 @@ namespace Label.API.Repositories
             await _context.SongArtists.AddAsync(songArtist);
             await _context.SaveChangesAsync();
             return songArtist;
-        }   
+        }
         public async Task<List<Song>> GetSongsBySongName(string songName)
         {
             return await _context.Songs.Where(s => s.SongName == songName).ToListAsync();
@@ -76,5 +77,22 @@ namespace Label.API.Repositories
             }
 
         }
+        // public async Task<List<Song>> GetSongsByRecordlabelName(string labelName)
+        // {
+        //     try
+        //     {
+        //         List<Song> songs = await _context.Songs.Include(s => s.Recordlabel).Where(s => s.Recordlabel.LabelName == labelName).ToListAsync();
+        //         // List<Song> songslabel = songs.Where(s => s.Recordlabel.LabelName == labelName).SingleOrDefaultAsync();
+        //         return songs;
+
+        //     }
+        //     catch (System.Exception ex)
+        //     {
+        //         throw ex;
+        //     }
+
+        // }
+
+
     }
 }
