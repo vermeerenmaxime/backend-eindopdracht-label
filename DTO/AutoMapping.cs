@@ -10,9 +10,6 @@ namespace Label.API.DTO
         {
 
             CreateMap<AlbumDTO, Album>();
-            CreateMap<Artist, ArtistDTO>();
-            CreateMap<Recordlabel, RecordlabelDTO>();
-            // CreateMap<Song, SongAddDTO>();
             CreateMap<SongAddDTO, Song>();
             CreateMap<SongUpdateDTO, Song>();
 
